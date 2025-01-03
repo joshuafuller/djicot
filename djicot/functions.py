@@ -152,6 +152,14 @@ def dji_to_cot_xml(  # NOQA pylint: disable=too-many-locals,too-many-branches,to
 
     cuas = ET.Element("__cuas")
     cuas.set("cot_host_id", cot_host_id)
+    cuas.set("uas_type", uas_type)
+    cuas.set("uas_type_8", parsed_data.get("device_type_8"))
+    cuas.set("uas_sn", uas_sn)
+    cuas.set("freq", parsed_data.get("freq", 0.0))
+    cuas.set("rssi", parsed_data.get("rssi", 0))
+    cuas.set("speed_e", parsed_data.get("speed_e", 0.0))
+    cuas.set("speed_n", parsed_data.get("speed_n", 0.0))
+    cuas.set("speed_u", parsed_data.get("speed_u", 0.0))
 
     cot_uid = f"DJI.{uas_sn}.uas"
     callsign = f"DJI-{uas_sn}"
@@ -170,8 +178,8 @@ def dji_to_cot_xml(  # NOQA pylint: disable=too-many-locals,too-many-branches,to
     remarks_fields.append(f"Serial Number: {uas_sn}")
     remarks_fields.append(f"Type: {uas_type}")
     remarks_fields.append(f"Freq: {parsed_data.get('freq', 0.0)}")
-    remarks_fields.append(f"RSSI: {parsed_data.get('RSSI', 0)}")
-    remarks_fields.append(f"Speed: {parsed_data.get('speed_E', 0.0)}")
+    remarks_fields.append(f"RSSI: {parsed_data.get('rssi', 0)}")
+    remarks_fields.append(f"Speed: {parsed_data.get('speed_e', 0.0)}")
     remarks_fields.append(f"{cot_host_id}")
     _remarks = " ".join(list(filter(None, remarks_fields)))
     remarks.text = _remarks
