@@ -96,7 +96,7 @@ faux_latest:
 	cp deb_dist/$(REPO_NAME)_*-1_all.deb deb_dist/$(REPO_NAME)_latest_all.deb
 	cp deb_dist/$(REPO_NAME)_*-1_all.deb deb_dist/python3-$(REPO_NAME)_latest_all.deb
 
-package: bdist_deb faux_latest
+package: install_test_requirements bdist_deb faux_latest
 
 extract: 
 	dpkg-deb -e $(wildcard deb_dist/*latest_all.deb) deb_dist/extract
