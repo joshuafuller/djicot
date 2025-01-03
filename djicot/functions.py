@@ -153,13 +153,13 @@ def dji_to_cot_xml(  # NOQA pylint: disable=too-many-locals,too-many-branches,to
     cuas = ET.Element("__cuas")
     cuas.set("cot_host_id", cot_host_id)
     cuas.set("uas_type", uas_type)
-    cuas.set("uas_type_8", parsed_data.get("device_type_8"))
-    cuas.set("uas_sn", uas_sn)
-    cuas.set("freq", parsed_data.get("freq", 0.0))
-    cuas.set("rssi", parsed_data.get("rssi", 0))
-    cuas.set("speed_e", parsed_data.get("speed_e", 0.0))
-    cuas.set("speed_n", parsed_data.get("speed_n", 0.0))
-    cuas.set("speed_u", parsed_data.get("speed_u", 0.0))
+    cuas.set("uas_type_8", str(parsed_data.get("device_type_8")))
+    cuas.set("uas_sn", str(uas_sn))
+    cuas.set("freq", str(parsed_data.get("freq", 0.0)))
+    cuas.set("rssi", str(parsed_data.get("rssi", 0)))
+    cuas.set("speed_e", str(parsed_data.get("speed_e", 0.0)))
+    cuas.set("speed_n", str(parsed_data.get("speed_n", 0.0)))
+    cuas.set("speed_u", str(parsed_data.get("speed_u", 0.0)))
 
     cot_uid = f"DJI.{uas_sn}.uas"
     callsign = f"DJI-{uas_sn}"
