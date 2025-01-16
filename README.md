@@ -1,4 +1,6 @@
-# DJICOT: DJI Drone Detection, Tracking & Identification with TAK
+# DJI Drone Detection, Tracking & Identification with TAK
+
+![DJICOT Concept of Operations](https://djicot.readthedocs.io/en/latest/media/djicot-conops.png)
 
 ## Overview
 
