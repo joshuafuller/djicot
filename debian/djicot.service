@@ -26,6 +26,7 @@ User=djicot
 ExecStart=/usr/bin/djicot
 RuntimeDirectory=djicot
 SyslogIdentifier=djicot
+EnvironmentFile=-/etc/aryaos/aryaos-config.txt
 EnvironmentFile=/etc/default/djicot
 Type=simple
 Restart=always
