@@ -267,7 +267,7 @@ def sensor_to_cot(
 
     # Remarks should always be the first sub-entity within the Detail entity.
     remarks = ET.Element("remarks")
-    remarks.text = f"{sensor_id=} {sensor_sn=} {sensor_type=} {cot_host_id=}: {data}"
+    remarks.text = f"sensor_id={sensor_id} sensor_sn={sensor_sn} sensor_type={sensor_type} cot_host_id={cot_host_id}: {data}"
 
     detail.append(remarks)
     detail.append(contact)
