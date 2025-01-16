@@ -1,10 +1,11 @@
-# Display DJI Drones in TAK
+# DJICOT: DJI Drone Detection, Tracking & Identification with TAK
 
-DJICOT is software for monitoring and analyzing over-the-air DJI drone data via the Team Awareness Kit (TAK) ecosystem of products.
+DJICOT is a tool designed to monitor and analyze DJI OcuSync Drone ID data within the 
+Team Awareness Kit (TAK) ecosystem. It provides capabilities for detecting, tracking, and identifying 
+drones using commercial off-the-shelf (COTS) equipment. DJICOT ensures rapid deployment and seamless 
+integration into existing common operating picture and situational awareness systems.
 
-Requires [ANTSDR DJI DroneID Firmware](https://github.com/alphafox02/antsdr_dji_droneid/tree/main)
-
-[Documentation is available here.](https://djicot.rtfd.io)
+[Read the documentation here.](https://djicot.rtfd.io)
 
 ## Copyright & License
 

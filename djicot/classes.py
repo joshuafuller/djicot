@@ -20,55 +20,79 @@
 
 import asyncio
 
-from typing import Optional
+import time
+
+from configparser import SectionProxy
+from typing import Optional, Union
 from urllib.parse import urlparse, ParseResult
 
-import pytak
-import djicot
+from pytak import QueueWorker
+
+from djicot import xml_to_cot, handle_frame, DEFAULT_FEED_URL, DEFAULT_READ_BYTES
 
 
-class DJIWorker(pytak.QueueWorker):
-    """Read DJI data from inputs, serialize to CoT, and put on TX queue."""
+class DJIWorker(QueueWorker):
+    """
+    DJIWorker is responsible for reading DJI data from inputs, serializing it to
+    CoT (Cursor on Target) format, and placing it on the transmission (TX) queue.
+
+    Attributes:
+        tx_queue (asyncio.Queue): The queue to which serialized CoT data is sent.
+        config (Union[SectionProxy, dict]): Configuration settings for the worker.
+        net_queue (asyncio.Queue): The queue from which raw DJI data is received.
+    """
 
     def __init__(
         self,
         tx_queue: asyncio.Queue,
-        config: dict,
+        config: Union[SectionProxy, dict],
         net_queue: asyncio.Queue,
     ) -> None:
-        """Initialize the DJIWorker."""
+        """Initializes the DJIWorker with the given TX queue, configuration, and network queue."""
         super().__init__(tx_queue, config)
         self.net_queue = net_queue
 
     async def handle_data(self, data) -> None:
-        """Handle Data from ADS-B receiver: Render to CoT, put on TX queue."""
-        event: Optional[bytes] = djicot.dji_to_cot(data, self.config)
-        await self.put_queue(event)
+        """Processes raw DJI data, converts it to CoT format, and places it on the TX queue."""
+        events = handle_frame(data, self.config)
+        for event in events:
+            await self.put_queue(event)
+
+    async def hello_event(self, init=False):
+        """Sends a "hello world" style event to the TX queue. This event is sent periodically or on initialization."""
+        timer = int(time.time()) % 60 == 0
+        if init or timer:
+            data = f"{init=} {timer=}"
+            event: Optional[bytes] = xml_to_cot(data, self.config, "sensor_to_cot")
+            await self.put_queue(event)
 
     async def run(self, _=-1) -> None:
-        """Run this Thread, Reads from Pollers."""
-
+        """Main execution loop of the worker. Sends periodic hello events and processes incoming data from the network queue."""
         self._logger.info("Running %s", self.__class__)
 
-        while 1:
+        if not self.config.get("PYTAK_NO_HELLO", False):
+            await self.hello_event(init=True)
+
+        while True:
+            await self.hello_event()
             received = await self.net_queue.get()
             if not received:
                 continue
             await self.handle_data(received)
 
 
-class NetWorker(pytak.QueueWorker):  # pylint: disable=too-few-public-methods
-    """Read DJI Data from network and puts on queue."""
+class NetWorker(QueueWorker):  # pylint: disable=too-few-public-methods
+    """
+    A worker class that reads data from a network connection and puts it on a queue.
+    """
 
     async def handle_data(self, data) -> None:
-        """Handle Data from network."""
+        """Asynchronously handles incoming data by placing it on the queue."""
         self.queue.put_nowait(data)
 
     async def run(self, _=-1) -> None:
-        """Run the main process loop."""
-        url: ParseResult = urlparse(
-            self.config.get("FEED_URL", djicot.DEFAULT_FEED_URL)
-        )
+        """Asynchronously runs the main loop to read data from the network and add it to the queue."""
+        url: ParseResult = urlparse(self.config.get("FEED_URL", DEFAULT_FEED_URL))
 
         self._logger.info("Running %s for %s", self.__class__, url.geturl())
 
@@ -78,6 +102,9 @@ class NetWorker(pytak.QueueWorker):  # pylint: disable=too-few-public-methods
 
         reader, _ = await asyncio.open_connection(host, port)
 
-        while 1:
-            received = await reader.read(1024)
+        read_bytes = self.config.get("READ_BYTES", DEFAULT_READ_BYTES)
+        self._logger.debug("read_bytes=%s", read_bytes)
+
+        while True:
+            received = await reader.read(read_bytes)
             await self.handle_data(received)

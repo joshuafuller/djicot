@@ -1,10 +1,10 @@
-DJICOT's functionality provided by a command-line program called `djicot`.
+# DJICOT Installation Guide
 
-There are several methods of installing DJICOT. They are listed below, in order of complexity.
+`djicot` is a command-line program that provides various functionalities. Below are the methods to install DJICOT, listed by complexity.
 
 ## Debian, Ubuntu, Raspberry Pi
 
-Install DJICOT, and prerequisite package [PyTAK](https://pytak.rtfd.io) 
+To install `djicot` and its prerequisite package [PyTAK](https://pytak.rtfd.io), follow these steps:
 
 ```sh linenums="1"
 sudo apt update -qq
@@ -16,7 +16,7 @@ sudo apt install -f ./djicot_latest_all.deb
 
 ## Windows, Linux
 
-Install from the Python Package Index (PyPI) [Advanced Users]::
+For advanced users, install `djicot` from the Python Package Index (PyPI):
 
 ```sh
 sudo python3 -m pip install djicot
@@ -24,7 +24,7 @@ sudo python3 -m pip install djicot
 
 ## Developers
 
-PRs welcome!
+We welcome pull requests! To set up a development environment, use the following commands:
 
 ```sh linenums="1"
 git clone https://github.com/snstac/djicot.git

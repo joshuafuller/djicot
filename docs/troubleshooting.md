@@ -1,26 +1,27 @@
-
-To report bugs, please set the DEBUG=1 environment variable to collect logs:
+To report bugs, enable debug logging by setting the `DEBUG=1` environment variable:
 
 ```sh
 DEBUG=1 djicot
 ```
 
-Or:
+Alternatively, you can use:
 
-```sh linenums="1"
+```sh
 export DEBUG=1
 djicot
 ```
 
-Or:
+Or update the configuration file:
 
-```sh linenums="1"
+```sh
 echo 'DEBUG=1' >> djicot.ini
 djicot -c djicot.ini
 ```
 
-You can view systemd/systemctl/service logs via:
+To view logs using systemd, run:
 
-```journalctl -fu djicot```
+```sh
+journalctl -fu djicot
+```
 
-Please use GitHub issues for support requests. Please note that DJICOT is free open source software and comes with no warranty. See LICENSE.
+For support, please use GitHub issues. Note that DJICOT is free open source software and comes with no warranty. See LICENSE for details.
