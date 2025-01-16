@@ -117,7 +117,7 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     # Extract relevant info for CoT
     lat = data.get(f"{leg}_lat")
     lon = data.get(f"{leg}_lon")
-    Logger.debug(f"{leg=} {lat=} {lon=}")
+    Logger.debug(f"leg={leg} lat={lat} lon={lon}")
 
     uas_sn = data.get("serial_number", "")
     uas_type = data.get("device_type", "")
