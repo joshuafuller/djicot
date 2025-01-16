@@ -1,6 +1,6 @@
 # DJICOT: DJI Drone Detection, Tracking & Identification with TAK
 
-DJICOT is a tool designed to monitor and analyze DJI OcuSync Drone ID data within the 
+DJICOT is a tool designed to monitor and analyze DJI OcuSync Drone ID sUAS data within the 
 Team Awareness Kit (TAK) ecosystem. It provides capabilities for detecting, tracking, and identifying 
 drones using commercial off-the-shelf (COTS) equipment. DJICOT ensures rapid deployment and seamless 
 integration into existing common operating picture and situational awareness systems.

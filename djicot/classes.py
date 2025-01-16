@@ -62,7 +62,7 @@ class DJIWorker(QueueWorker):
         """Sends a "hello world" style event to the TX queue. This event is sent periodically or on initialization."""
         timer = int(time.time()) % 60 == 0
         if init or timer:
-            data = f"{init=} {timer=}"
+            data = f"init={init} timer={timer}"
             event: Optional[bytes] = xml_to_cot(data, self.config, "sensor_to_cot")
             await self.put_queue(event)
 
