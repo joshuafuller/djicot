@@ -1,4 +1,4 @@
-# DJICOT Requirements
+# Requirements
 
 * Python 3.7 or later environment
 * [AntSDR E200](https://www.crowdsupply.com/microphase-technology/antsdr-e200)

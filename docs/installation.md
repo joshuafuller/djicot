@@ -1,4 +1,4 @@
-# DJICOT Installation Guide
+# Installation Guide
 
 `djicot` is a command-line program that provides various functionalities. Below are the methods to install DJICOT, listed by complexity.
 

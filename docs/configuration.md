@@ -1,3 +1,5 @@
+# Configuration
+
 DJICOT's configuration parameters can be set two ways:
 
 1. In an INI-style configuration file. (ex. ``djicot -c config.ini``)
