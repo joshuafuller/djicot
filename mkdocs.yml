@@ -1,7 +1,7 @@
 site_name: Display DJI Drones in TAK
 site_url: https://djicot.rtfd.io/
 repo_url: https://github.com/snstac/djicot/
-site_description: Software for monitoring and analyzing over-the-air DJI drone data via the Team Awareness Kit (TAK) ecosystem of products.
+site_description: Geolocate, detect, track & identify DJI Drones with TAK.
 site_author: Greg Albrecht <gba@snstac.com>
 copyright: Copyright Sensors & Signals LLC https://www.snstac.com
 
@@ -11,8 +11,8 @@ theme:
   features:
     - content.code.copy
     - content.code.select
-    - content.code.annotate 
-    
+    - content.code.annotate
+
 plugins:
   - include-markdown:
       opening_tag: "{!"
