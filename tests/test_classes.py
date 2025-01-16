@@ -18,7 +18,7 @@
 
 import asyncio
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import patch
 from djicot.classes import DJIWorker
 from djicot.constants import DEFAULT_SENSOR_COT_TYPE, DEFAULT_COT_TYPE
 from configparser import ConfigParser, SectionProxy
