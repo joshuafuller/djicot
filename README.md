@@ -1,6 +1,6 @@
 # DJI Drone Detection, Tracking & Identification with TAK
 
-![DJICOT Concept of Operations](https://djicot.readthedocs.io/en/latest/media/djicot-conops.png)
+![DJICOT Screenshot in ATAK showing a DJI Mini 3 Pro UAS, Home & Operator (GCS)](https://djicot.readthedocs.io/en/latest/media/screenshot_1737061493_642.png)
 
 ## Overview
 
