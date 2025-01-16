@@ -24,7 +24,7 @@ It imports and exposes constants, functions, and classes necessary for the
 operation of the gateway.
 """
 
-__version__ = "1.0.0"
+from .version import __version__  # NOQA
 
 from .constants import (  # NOQA
     DEFAULT_FEED_URL,
