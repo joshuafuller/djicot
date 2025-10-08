@@ -18,25 +18,25 @@
 
 """DJICOT Constants."""
 
-# Feed URL to use out of the box, in this case the JSON from the local filesystem.
+# IP address of ANT SDR E200 running DJI Drone ID firmware:
 DEFAULT_FEED_URL: str = "tcp://192.168.1.10:41030"
-
 DEFAULT_COT_TYPE: str = "a-u-A-M-H-Q"
 
 DEFAULT_SENSOR_LAT: str = "0.0"
 DEFAULT_SENSOR_LON: str = "0.0"
+
 DEFAULT_SENSOR_ID: str = "DJICOT"
 DEFAULT_SENSOR_NAME: str = "DJICOT"
 DEFAULT_SENSOR_DETAIL: str = "DJICOT is a DJI Drone ID to TAK Gateway"
-DEFAULT_SENSOR_STALE: str = "600"
-DEFAULT_SENSOR_TYPE: str = "Drone ID"
+DEFAULT_SENSOR_TYPE: str = "DJIDroneID"
 DEFAULT_SENSOR_UID: str = "DJICOT-0001"
 DEFAULT_SENSOR_CONTACT: str = "info@snstac.com"
 DEFAULT_SENSOR_COT_TYPE: str = "a-f-G-E-S-E"
+DEFAULT_SENSOR_STALE: str = "600"
 DEFAULT_SENSOR_SN: str = "0001"
-DEFAULT_SENSOR_HAE: str = "0"
-DEFAULT_SENSOR_CE: str = "0"
-DEFAULT_SENSOR_LE: str = "0"
+DEFAULT_SENSOR_HAE: str = "9999999.0"
+DEFAULT_SENSOR_CE: str = "9999999.0"
+DEFAULT_SENSOR_LE: str = "9999999.0"
 DEFAULT_SENSOR_ICON: str = "u-av-a-f-o"
 DEFAULT_SENSOR_COLOR: str = "#FF0000"
 DEFAULT_SENSOR_ICONSET: str = "2525c"

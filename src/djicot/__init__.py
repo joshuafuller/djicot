@@ -17,7 +17,7 @@
 #
 
 """
-DJI to TAK Gateway.
+DJI Drone ID to TAK Gateway.
 
 This module serves as the entry point for the DJI to TAK Gateway application.
 It imports and exposes constants, functions, and classes necessary for the
@@ -31,6 +31,9 @@ from .constants import (  # NOQA
     DEFAULT_COT_TYPE,
     DEFAULT_SENSOR_LAT,
     DEFAULT_SENSOR_LON,
+    DEFAULT_SENSOR_HAE,
+    DEFAULT_SENSOR_LE,
+    DEFAULT_SENSOR_CE,
     DEFAULT_SENSOR_ID,
     DEFAULT_SENSOR_NAME,
     DEFAULT_SENSOR_DETAIL,

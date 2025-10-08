@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-"""DJI OcuSync Decoding Functions."""
+"""DJI Drone ID Decoding Functions."""
 
 import logging
 import os
@@ -47,21 +47,21 @@ DJI_PAYLOAD = {
 
 def parse_frame(frame):
     """
-    Parses a given OcuSync frame and extracts its components.
+    Parse a DJI Drone ID frame and extract its components.
 
     Args:
-        frame (bytes): The input frame to be parsed.
+        frame (bytes): The input frame to parse.
 
     Returns:
-        tuple: A tuple containing the package type (int) and the data (bytes).
+        tuple: (package_type (int), data (bytes))
 
-    The frame is expected to have the following structure:
-        - The first 2 bytes are the frame header.
-        - The 3rd byte is the package type.
-        - The 4th and 5th bytes represent the length of the package.
-        - The remaining bytes contain the data.
+    Frame structure:
+        - Bytes 0-1: Frame header
+        - Byte 2: Package type
+        - Bytes 3-4: Package length (little-endian unsigned short)
+        - Bytes 5+: Data payload
 
-    The function logs the frame, frame header, package type, length bytes, package length, and data for debugging purposes.
+    Logs relevant fields for debugging.
     """
     Logger.debug("frame=", frame)
 
@@ -81,6 +81,14 @@ def parse_frame(frame):
 
 
 def parse_data(data):
+    """
+    Parse the data payload of a DJI Drone ID frame.
+
+    Args:
+        data (bytes): The data payload to parse.
+    Returns:
+        dict: Parsed data fields.
+    """
     payload = DJI_PAYLOAD.copy()
     try:
         payload = {
@@ -106,7 +114,8 @@ def parse_data(data):
             print(f"UnicodeDecodeError: {exc}")
         # If we fail to decode, it may indicate encrypted or partial data
         payload = {
-            "device_type": "Unknown DJI OcuSync Format (Encrypted or Partial Data)",
+            "device_type": "Unknown",
+            "error": str(exc),
             "device_type_8": 255,
         }
 

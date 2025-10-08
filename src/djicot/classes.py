@@ -33,13 +33,16 @@ from djicot import xml_to_cot, handle_frame, DEFAULT_FEED_URL, DEFAULT_READ_BYTE
 
 class DJIWorker(QueueWorker):
     """
-    DJIWorker is responsible for reading DJI data from inputs, serializing it to
-    CoT (Cursor on Target) format, and placing it on the transmission (TX) queue.
+    DJIWorker asynchronously processes DJI Drone ID data.
+
+    This worker reads raw DJI data from an input queue, converts it to 
+    Cursor on Target (CoT) XML events, and places the resulting events onto a
+    transmission (TX) queue for further handling.
 
     Attributes:
-        tx_queue (asyncio.Queue): The queue to which serialized CoT data is sent.
+        tx_queue (asyncio.Queue): Queue for outgoing CoT events.
         config (Union[SectionProxy, dict]): Configuration settings for the worker.
-        net_queue (asyncio.Queue): The queue from which raw DJI data is received.
+        net_queue (asyncio.Queue): Queue providing incoming raw DJI data.
     """
 
     def __init__(
@@ -53,7 +56,8 @@ class DJIWorker(QueueWorker):
         self.net_queue = net_queue
 
     async def handle_data(self, data) -> None:
-        """Processes raw DJI data, converts it to CoT format, and places it on the TX queue."""
+        """Processes raw DJI Drone ID data, converts it to CoT format, and places it on the TX queue."""
+        self._logger.debug("Received data: %s", data)  # Debug log for received data
         events = handle_frame(data, self.config)
         for event in events:
             await self.put_queue(event)
