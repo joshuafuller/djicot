@@ -138,6 +138,10 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
         lon = None
     Logger.debug(f"leg={leg} lat={lat} lon={lon}")
 
+    if not lat_lon_valid and config.get("HIDE_INVALID_DATA", djicot.DEFAULT_HIDE_INVALID_DATA):
+        Logger.debug(f"Hiding invalid {leg} data")
+        return None
+
     freq = str(data.get("freq", 0.0))
     rssi = str(data.get("rssi", -999))
     serial_number = data.get("serial_number")
