@@ -44,6 +44,7 @@ from .constants import (  # NOQA
     DEFAULT_SENSOR_COT_TYPE,
     DEFAULT_SENSOR_SN,
     DEFAULT_READ_BYTES,
+    DEFAULT_BREAD_CRUMBS_ENABLED
 )
 
 from .functions import create_tasks, xml_to_cot, handle_frame  # NOQA

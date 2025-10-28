@@ -1,32 +1,23 @@
-# DJI Drone Detection, Tracking & Identification with TAK
+# DJI Counter-UAS Intelligence Platform for Public Safety Operations
 
 ![DJICOT Screenshot in ATAK showing a DJI Mini 3 Pro UAS, Home & Operator (GCS)](https://djicot.readthedocs.io/en/latest/media/screenshot_1737061493_642.png)
 
 ## Overview
 
-DJICOT is a tool for monitoring and analyzing DJI OcuSync Drone ID sUAS data within the 
-Team Awareness Kit (TAK) ecosystem. It enables geolocating, detection, tracking, and 
-identification of drones using commercial off-the-shelf (COTS) equipment. DJICOT 
-supports rapid deployment into a C-UAS processing chain and integrates seamlessly into 
-existing common operating picture and situational awareness systems.
+DJICOT is a specialized Counter-Unmanned Aircraft System (C-UAS) tool designed for public safety operations. It provides real-time detection, tracking, and identification of DJI drones through passive RF monitoring of OcuSync Drone ID transmissions. The system integrates directly into the Team Awareness Kit (TAK) ecosystem, enabling seamless integration with existing command and control infrastructure for enhanced situational awareness and threat assessment.
 
 [Read the full documentation here.](https://djicot.rtfd.io)
 
-## Features
+## Key Capabilities
 
-- Real-time drone geolocation, detection and tracking.
-- DJI drone identification via OcuSync Drone ID.
-- TAK ecosystem integration.
-- Uses COTS equipment.
-- Rapid C-UAS deployment.
-- Integrates with situational awareness systems.
-- Displays drone, operator, and home positions.
-- Shows flight vectors: position, speed, heading, altitude.
-- Displays drone serial number.
-- Decodes DJI OcuSync UAV to GCS C2 channel.
-- Supports 2.4 GHz and 5.8 GHz frequencies.
-- Employs passive RF ESM.
-- Detection range of > 2 miles.
+- **Passive RF Detection**: Real-time drone detection and geolocation using commercial off-the-shelf (COTS) equipment
+- **Target Identification**: Decodes DJI OcuSync Drone ID for positive identification and serial number extraction
+- **Multi-Platform Integration**: Native TAK ecosystem support for C2 systems and common operating picture displays
+- **Operational Intelligence**: Displays drone, operator (GCS), and home point positions with flight vectors including speed, heading, and altitude
+- **Dual-Band Coverage**: Monitors both 2.4 GHz and 5.8 GHz frequency bands
+- **Extended Range**: Detection capability exceeding 2 miles for enhanced perimeter security
+- **Rapid Deployment**: Purpose-built for quick integration into existing C-UAS processing chains
+- **Electronic Support Measures (ESM)**: Employs passive RF collection methods for covert operations
 
 ## Copyright & License
 

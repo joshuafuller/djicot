@@ -30,7 +30,6 @@ import pytak
 import djicot
 
 from .dji_functions import parse_frame, parse_data
-import pprint
 
 
 APP_NAME = "djicot"
@@ -133,7 +132,8 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     lat = data.get(f"{leg}_lat")
     lon = data.get(f"{leg}_lon")
 
-    if not is_valid_lat_lon(lat, lon):
+    lat_lon_valid = is_valid_lat_lon(lat, lon)
+    if not lat_lon_valid:
         lat = None
         lon = None
     Logger.debug(f"leg={leg} lat={lat} lon={lon}")
@@ -152,7 +152,7 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     callsign = f"{uas_sn}.{leg}"
     ce = str(data.get("nac_p", "9999999.0"))
 
-    if lat is None or lon is None:
+    if not lat_lon_valid:
         if leg == "op" or leg == "home":
             Logger.debug(f"No {leg} lat/lon")
             return None
@@ -184,6 +184,17 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     cuas.set("speed_e", str(data.get("speed_e", 0.0)))
     cuas.set("speed_n", str(data.get("speed_n", 0.0)))
     cuas.set("speed_u", str(data.get("speed_u", 0.0)))
+    if lat_lon_valid:
+        cuas.set("valid_geo", "1")
+        cuas.set("sn_present", "1")
+        cuas.set("serial_valid", "1")
+    else:
+        cuas.set("valid_geo", "0")
+        cuas.set("sn_present", "0")
+        cuas.set("serial_valid", "0")
+
+    crumbs = ET.Element("__bread_crumbs")
+    crumbs.set("enabled", str(config.get("BREAD_CRUMBS_ENABLED", djicot.DEFAULT_BREAD_CRUMBS_ENABLED)))
 
     contact: ET.Element = ET.Element("contact")
     contact.set("callsign", callsign)
@@ -210,6 +221,7 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     detail.append(contact)
     detail.append(track)
     detail.append(cuas)
+    detail.append(crumbs)
 
     le = str(data.get("nac_v", "9999999.0"))
     hae = str(data.get("alt_geom", "9999999.0"))
