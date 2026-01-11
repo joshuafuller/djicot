@@ -19,7 +19,6 @@
 """DJICOT Class Definitions."""
 
 import asyncio
-
 import time
 
 from configparser import SectionProxy
@@ -55,19 +54,19 @@ class DJIWorker(QueueWorker):
         super().__init__(tx_queue, config)
         self.net_queue = net_queue
 
-    async def handle_data(self, data) -> None:
+    async def handle_data(self, data: bytes) -> None:
         """Processes raw DJI Drone ID data, converts it to CoT format, and places it on the TX queue."""
-        self._logger.debug("Received data: %s", data)  # Debug log for received data
+        self._logger.debug("Received data: %s", data)
         events = handle_frame(data, self.config)
         for event in events:
             await self.put_queue(event)
 
-    async def hello_event(self, init=False):
+    async def hello_event(self, init: bool = False) -> None:
         """Sends a "hello world" style event to the TX queue. This event is sent periodically or on initialization."""
-        timer = int(time.time()) % 60 == 0
-        if init or timer:
-            data = f"init={init} timer={timer}"
-            event: Optional[bytes] = xml_to_cot(data, self.config, "sensor_to_cot")
+        if init or int(time.time()) % 60 == 0:
+            event: Optional[bytes] = xml_to_cot(
+                f"init={init}", self.config, "sensor_to_cot"
+            )
             await self.put_queue(event)
 
     async def run(self, _=-1) -> None:
@@ -90,7 +89,7 @@ class NetWorker(QueueWorker):  # pylint: disable=too-few-public-methods
     A worker class that reads data from a network connection and puts it on a queue.
     """
 
-    async def handle_data(self, data) -> None:
+    async def handle_data(self, data: bytes) -> None:
         """Asynchronously handles incoming data by placing it on the queue."""
         self.queue.put_nowait(data)
 

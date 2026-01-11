@@ -84,18 +84,16 @@ def dji_home_to_cot(
     """Convert DJI Home data to CoT"""
     return gen_dji_cot(data, config, "home")
 
-# Validate latitude and longitude
-def is_valid_lat_lon(lat, lon):
-    valid = False
+def is_valid_lat_lon(lat, lon) -> bool:
+    """Validate latitude and longitude values."""
     try:
-        lat = float(lat)
-        lon = float(lon)
-        valid = lat != 0.0 and lon != 0.0
-        if valid:
-            valid = -90.0 <= lat <= 90.0 and -180.0 <= lon <= 180.0
+        lat_f = float(lat)
+        lon_f = float(lon)
+        if lat_f == 0.0 or lon_f == 0.0:
+            return False
+        return -90.0 <= lat_f <= 90.0 and -180.0 <= lon_f <= 180.0
     except (TypeError, ValueError):
-        pass
-    return valid
+        return False
 
 
 def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-many-statements
@@ -149,11 +147,13 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     uas_type = data.get("device_type", "")
 
     cot_type: str = str(config.get("COT_TYPE", djicot.DEFAULT_COT_TYPE))
+    cot_uid = f"DJI-{uas_sn}"
     if leg == "op" or leg == "home":
         cot_type = str("a-u-G-U-C")
+        cot_uid = f"DJI-{uas_sn}-{leg}"
 
-    cot_uid = f"DJI.{uas_sn}.{leg}"
-    callsign = f"{uas_sn}.{leg}"
+    callsign = f"DJI {uas_type} {leg} ({uas_sn[-4:]})"
+
     ce = str(data.get("nac_p", "9999999.0"))
 
     if not lat_lon_valid:
@@ -218,8 +218,7 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     remarks_fields.append(f"speed={data.get('speed_e', 0.0)}")
     remarks_fields.append(f"sensor_id={sensor_id}")
     remarks_fields.append(f"host_id={cot_host_id}")
-    _remarks = " ".join(list(filter(None, remarks_fields)))
-    remarks.text = _remarks
+    remarks.text = " ".join(filter(None, remarks_fields))
     detail.append(remarks)
 
     detail.append(contact)
@@ -243,10 +242,12 @@ def gen_dji_cot(  # NOQA pylint: disable=too-many-locals,too-many-branches,too-m
     cot = pytak.gen_cot_xml(**cot_d)
     cot.set("access", config.get("COT_ACCESS", pytak.DEFAULT_COT_ACCESS))
 
-    _detail = cot.findall("detail")[0]
-    flowtags = _detail.findall("_flow-tags_")
-    detail.extend(flowtags)
-    cot.remove(_detail)
+    # Replace detail element while preserving flow tags
+    _detail = cot.find("detail")
+    if _detail is not None:
+        flowtags = _detail.findall("_flow-tags_")
+        detail.extend(flowtags)
+        cot.remove(_detail)
     cot.append(detail)
 
     return cot
@@ -329,22 +330,26 @@ def sensor_to_cot(
     cot = pytak.gen_cot_xml(**cot_d)
     cot.set("access", config.get("COT_ACCESS", pytak.DEFAULT_COT_ACCESS))
 
-    _detail = cot.findall("detail")[0]
-    flowtags = _detail.findall("_flow-tags_")
-    detail.extend(flowtags)
-    cot.remove(_detail)
+    # Replace detail element while preserving flow tags
+    _detail = cot.find("detail")
+    if _detail is not None:
+        flowtags = _detail.findall("_flow-tags_")
+        detail.extend(flowtags)
+        cot.remove(_detail)
     cot.append(detail)
 
     return cot
 
 
 def xml_to_cot(
-    data: dict, config: Union[SectionProxy, dict, None] = None, func=None
+    data: dict, config: Union[SectionProxy, dict, None] = None, func: Optional[str] = None
 ) -> Optional[bytes]:
     """Convert data to a CoT XML string using the specified function."""
     cot: Optional[ET.Element] = getattr(djicot.functions, func)(data, config)
     return (
-        b"\n".join([pytak.DEFAULT_XML_DECLARATION, ET.tostring(cot)]) if cot is not None else None
+        b"\n".join([pytak.DEFAULT_XML_DECLARATION, ET.tostring(cot)])
+        if cot is not None
+        else None
     )
 
 
@@ -374,27 +379,28 @@ def handle_frame(
     """
     config = config or {}
     events = []
-    package_type = None
-    data = None
-    parsed_data = {}
 
     try:
         package_type, data = parse_frame(frame)
     except Exception as exc:
-        Logger.warning(f"Error parsing DJI frame: {exc}")
+        Logger.warning("Error parsing DJI frame: %s", exc)
+        return events
 
     if package_type != 0x01:
-        Logger.warning(f"Invalid DJI package type: {package_type}")
+        Logger.warning("Invalid DJI package type: %s", package_type)
+        return events
 
     if not data:
         Logger.warning("No DJI data")
-    else:
-        try:
-            parsed_data = parse_data(data)
-        except Exception as exc:
-            Logger.warning(f"Error parsing DJI data: {exc}")
+        return events
 
-    Logger.debug(f"Parsed DJI data: {parsed_data}")
+    try:
+        parsed_data = parse_data(data)
+    except Exception as exc:
+        Logger.warning("Error parsing DJI data: %s", exc)
+        return events
+
+    Logger.debug("Parsed DJI data: %s", parsed_data)
 
     funcs = ["dji_uas_to_cot", "dji_op_to_cot", "dji_home_to_cot"]
     for func in funcs:

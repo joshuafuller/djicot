@@ -63,19 +63,16 @@ def parse_frame(frame):
 
     Logs relevant fields for debugging.
     """
-    Logger.debug("frame=", frame)
-
     frame_header = frame[:2]
     package_type = frame[2]
     length_bytes = frame[3:5]
     package_length = struct.unpack("H", length_bytes)[0]
     data = frame[5 : 5 + package_length - 5]
 
-    Logger.debug("frame_header=", frame_header)
-    Logger.debug("package_type=", package_type)
-    Logger.debug("length_bytes=", length_bytes)
-    Logger.debug("package_length=", package_length)
-    Logger.debug("data=", data)
+    Logger.debug(
+        "Parsed frame - header=%s, type=%s, length=%s",
+        frame_header, package_type, package_length
+    )
 
     return package_type, data
 
